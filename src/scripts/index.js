@@ -1,7 +1,7 @@
 'use strict';
 
 const action = document.querySelector('.action');
-const templateImageCard = document.querySelector('#image');
+const templateImageCard = document.getElementById('image');
 const templateImagePopup = document.querySelector('#popup-image');
 const container = document.querySelector('.images');
 
@@ -18,7 +18,7 @@ let loaderTimeout;
  * Отправляется первый запрос за картинками, юез параметров т.к. с дефолтными настройками.
  */
 const initialState = function () {
-    action.disabled = false;
+    action.style.disabled = false;
     getPictures();
 }
 
@@ -62,7 +62,7 @@ const showLoader = function () {
 const hideLoader = function () {
     loaderTimeout = setTimeout(function () {
         loader.style.visibility = 'hidden';
-        loaderTimeout.clearTimeout();
+        clearTimeout(loaderTimeout);
     }, 700);
 }
 
@@ -91,20 +91,20 @@ const renderPictures = function (list) {
         throw Error(`Pictures not defined. The list length: ${list.length}`);
     }
 
-    const clone = templateImageCard.content.cloneNode(true);
     const fragment = document.createDocumentFragment();
 
     list.forEach(function (element) {
-        const link = clone.querySelector('a');
+        const clone = templateImageCard.content.cloneNode(true);
+        const link = clone.querySelector('a.link');
 
         link.href = element.url;
-        link.dataset.id = element.id;
 
         const image = clone.querySelector('img');
         image.src = cropImage(element.download_url, 5);
         image.alt = element.author;
+        image.dataset.id = element.id;
         image.classList.add('preview');
-        fragment.appendChild(clone)
+        fragment.appendChild(clone);
     });
 
     container.appendChild(fragment);
@@ -139,6 +139,7 @@ const renderPopupPicture = function (picture) {
  */
 const togglePopup = function () {
     popup.classList.toggle('open');
+    document.body.style.overflowY = popup.classList.contains("open") ? "hidden" : "scroll";
 }
 
 /**
@@ -151,12 +152,12 @@ const togglePopup = function () {
  */
 const actionHandler = function (evt) {
     evt.preventDefault();
-    const nextPage = evt.currentTarget.dataset.page;
+    const nextPage = +evt.currentTarget.dataset.page;
     evt.currentTarget.dataset.page = nextPage + 1;
 
     if (nextPage > MAX_PAGE_IAMGES) {
         console.warn(`WARN: You are trying to call a page that exceeds ${MAX_PAGE_IAMGES}`);
-        evt.currentTarget.disabled = true;
+        evt.target.disabled = true;
     } else {
         getPictures(nextPage);
     }
@@ -172,6 +173,7 @@ const imageHandler = function (evt) {
     evt.preventDefault();
 
     if (evt.target.closest('a')) {
+        console.log(evt.target);
         getPictureInfo(evt.target.dataset.id);
     }
 }

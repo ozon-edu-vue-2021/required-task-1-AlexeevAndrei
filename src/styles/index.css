@@ -10,6 +10,7 @@ img {
     width: 100%;
     max-width: 100%;
     display: bloсk;
+    border-radius: inherit;
 }
 
 a {
@@ -21,7 +22,6 @@ a:hover {
 }
 
 button {
-    display: block;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -56,6 +56,7 @@ main {
     padding: 10px 20px;
     border-radius: 6px;
     margin: 10px 0;
+    align-self: center;
 }
 
 .action:hover {
@@ -63,7 +64,7 @@ main {
 }
 
 /* Images style */
-.content {
+.main .content {
     position: relative;
     padding: 20px;
     margin-bottom: 20px;
@@ -80,19 +81,6 @@ a {
     min-height: 100px;
 }
 
-a:nth-child(n) {
-    background-color: #EFEBE9;
-}
-
-a:nth-child(2n) {
-    background-color: #D7CCC8;
-}
-
-a:nth-child(3n) {
-    background-color: #BCAAA4;
-}
-
-/* Popup style */
 .popup .content {
     text-align: right;
     column-count: initial;
@@ -121,19 +109,21 @@ figcaption {
     position: fixed;
     visibility: hidden;
     display: flex;
+    flex-direction: column;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     background-color: rgba(33, 33, 33, 0.5);
-    z-index: -1;
+    z-index: 99;
 }
 
 .popup.open {
     visibility: visible;
+    overflow-y: auto;
 }
 
-.action {
+.action.close{
     position: absolute;
     top: 50px;
     right: 50px;
